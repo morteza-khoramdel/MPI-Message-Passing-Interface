@@ -10,7 +10,16 @@ services:
     networks:
       - mpi_network
 
+
   mpi_slave1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: mpiexec -n 1 python3 slave.py
+    volumes:
+      - ./slave.py:/app/slave.py
+
+  mpi_slave2:
     build:
       context: .
       dockerfile: Dockerfile
