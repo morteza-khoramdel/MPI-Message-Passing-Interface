@@ -1,20 +1,19 @@
-import subprocess
 from mpi4py import MPI
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-data = comm.bcast(None, root=0)  # Receive broadcasted data from the master
+# Perform some task here
+result = rank * 2  # Example task: Multiply rank by 2
 
-websites = ["www.example.com", "www.google.com"]
+# Send result to master process
+comm.send(result, dest=0)
 
-ping_results = []
-for website in websites:
-    # Ping the website and capture the result
-    result = subprocess.run(["ping", "-c", "4", website], capture_output=True, text=True)
-    ping_results.append(result.stdout)
+# Receive data from master process
+data = comm.recv(source=0)
 
-# Send the ping results to the master
-comm.send({'rank': rank, 'ping_results': ping_results}, dest=0)
+# Perform some task using the received data
+processed_data = data['message'] + ' Slave ' + str(rank)
 
-print("Slave process with rank", rank, "finished the task and sent the ping results.")
+# Send processed data back to master process
+comm.send(processed_data, dest=0)

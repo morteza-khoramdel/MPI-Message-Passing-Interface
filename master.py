@@ -9,21 +9,26 @@ if rank == 0:
     print("I am the master process.")
     data = {'message': 'Hello, slaves!'}
 
+    # Send data to slave processes
     for i in range(1, size):
-        received_data = comm.recv(source=i)  # Receive data from a finished slave
-        print("Received data from slave", received_data['rank'], ":", received_data['result'])
+        comm.send(data, dest=i)
 
+    # Receive results from slave processes
+    results = []
+    for i in range(1, size):
+        result = comm.recv(source=i)
+        results.append(result)
+
+    print("Results:", results)
 else:
     # Slave processes
     print("I am a slave process with rank", rank)
-    data = None
 
-data = comm.bcast(data, root=0)  # Broadcast data from master to all slaves
+    # Receive data from master process
+    data = comm.recv(source=0)
 
-# Simulating some computation or task
-result = rank * 2
+    # Perform some task here
+    result = rank * 2  # Example task: Multiply rank by 2
 
-# Send result and rank to the master
-comm.send({'rank': rank, 'result': result}, dest=0)
-
-print("Process", rank, "finished the task and sent the result:", result)
+    # Send result to master process
+    comm.send(result, dest=0)
