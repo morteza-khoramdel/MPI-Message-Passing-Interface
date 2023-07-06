@@ -7,11 +7,8 @@ rank = comm.Get_rank()
 # Get the master container name from the command line argument
 master_container_name = sys.argv[1]
 
-# Get the hostname of the master container
-master_hostname = MPI.Get_processor_name()
-
-# Get the rank of the master process
-master_rank = comm.name2rank(master_container_name)
+# Get the rank of the master process (which is 0)
+master_rank = 0
 
 # Perform some task here
 result = rank * 2  # Example task: Multiply rank by 2
