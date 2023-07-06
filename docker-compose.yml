@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mpi_master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: mpiexec -n 1 python3 master.py
+    volumes:
+      - ./master.py:/app/master.py
+    networks:
+      - mpi_network
+
+  mpi_slave1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: mpiexec -n 1 python3 slave.py
+    volumes:
+      - ./slave.py:/app/slave.py
+    networks:
+      - mpi_network
+
+networks:
+  mpi_network:
