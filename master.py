@@ -20,15 +20,3 @@ if rank == 0:
         results.append(result)
 
     print("Results:", results)
-else:
-    # Slave processes
-    print("I am a slave process with rank", rank)
-
-    # Receive data from master process
-    data = comm.recv(source=0)
-
-    # Perform some task here
-    result = rank * 2  # Example task: Multiply rank by 2
-
-    # Send result to master process
-    comm.send(result, dest=0)
