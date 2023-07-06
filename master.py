@@ -11,12 +11,24 @@ if rank == 0:
 
     # Send data to slave processes
     for i in range(1, size):
-        comm.send(data, dest=i)
+        comm.send(data, dest=i, tag=1)
 
     # Receive results from slave processes
     results = []
     for i in range(1, size):
-        result = comm.recv(source=i)
+        result = comm.recv(source=i, tag=2)
         results.append(result)
 
     print("Results:", results)
+else:
+    # Slave processes
+    print("I am a slave process with rank", rank)
+
+    # Receive data from master process
+    data = comm.recv(source=0, tag=1)
+
+    # Perform some task here
+    result = rank * 2  # Example task: Multiply rank by 2
+
+    # Send result to master process
+    comm.send(result, dest=0, tag=2)
