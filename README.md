@@ -29,6 +29,10 @@ To run the MPI Master-Slave Application, follow these steps:
 4. Build the Docker image:
 5. Start the application:
 
+```
+docker-compose exec --user mpirun --privileged mpi_head mpirun -n 2 python /home/mpirun/mpi4py_benchmarks/all_tests.py
+
+```
 This command starts the MPI application with one master process and two slave processes. Adjust the scaling factor (`2` in this case) to control the number of slave processes.
 
 6. Observe the output in the terminal. You will see the execution of the master and slave processes, as well as the results returned by the slave processes to the master.
